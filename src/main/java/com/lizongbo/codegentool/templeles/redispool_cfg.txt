@@ -1,0 +1,31 @@
+#dbppol cfg for zone 0
+#Tue Nov 17 11:05:33 CST 2015
+jmxEnabled=true
+testWhileIdle=true
+#lifo=
+numTestsPerEvictionRun=-1
+minEvictableIdleTimeMillis=60000
+#testOnReturn=
+#softMinEvictableIdleTimeMillis=
+#testOnCreate=
+jmxNameBase=redispool4zone0
+#blockWhenExhausted=
+timeBetweenEvictionRunsMillis=30000
+#maxWaitMillis=
+#testOnBorrow=
+#fairness=
+jmxNamePrefix=redispool4zone0
+#evictionPolicyClassName=
+
+redisServer.host = 127.0.0.1
+redisServer.port = 6379
+redisServer.connectionTimeout = 2000
+redisServer.soTimeout = 2000
+redisServer.password = 8246ee36b541cb07f33a62538103fc6b
+#redisServer.database = not use     
+redisServer.clientName = jedis
+
+maxTotal = 1024
+maxIdle = 200
+minIdle = 15
+

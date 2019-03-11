@@ -1,0 +1,23 @@
+using UnityEngine;
+using System.Collections;
+using System;
+using UnityEngine.UI;
+using net.bilinkeji.common.uihelpers;
+
+public class ${ClassName}ButtonClickHandler {
+
+	public enum CTRL_NAME {
+		${CtrlNameEnum}
+	};
+	
+	${BtnCallbacks}
+
+	public void bindClick4${ClassName}(){
+		GecaoButtonOnClickHelper gbch= GecaoButtonOnClickHelper.newInstance();
+
+		${addOnClickEvents}
+
+		gbch.BindButtonOnClickEvent();
+	}
+
+}

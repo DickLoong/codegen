@@ -1,0 +1,17 @@
+using UnityEngine;
+using System.Collections;
+using System;
+using UnityEngine.UI;
+using net.bilinkeji.common.uihelpers;
+
+public class ${ClassName}ButtonClickHandlerImpl : ${ClassName}ButtonClickHandler {
+	${BtnCallbacks}
+	
+	public void bindClick4${ClassName}SceneXXXXXX (){
+		GecaoButtonOnClickHelper gbch= GecaoButtonOnClickHelper.newInstance();
+
+		${addOnClickEvents}
+
+		gbch.BindButtonOnClickEvent();
+	}
+}
