@@ -52,6 +52,7 @@ public class CSVImportUtil {
                 searchingFileList = swappingFileList;
             }
             boolean successFlag = true;
+            List<String> configNameList = new LinkedList<>();
             for(File foundFile : fileList) {
                 try {
                     FileInputStream fis = new FileInputStream(foundFile);
@@ -118,10 +119,17 @@ public class CSVImportUtil {
                                 new FileOutputStream(targetJsonFileLocation), "UTF-8"));
                         bw.write(outputString);
                         bw.close();
+                        configNameList.add(name);
                     }
                 }catch(Throwable th){
                     th.printStackTrace();
                 }
+            }
+            File menuList = new File(JSON_OUTPUT_DIR,"config.menu");
+            try(FileWriter fw = new FileWriter(menuList)){
+                String jsonArrayList = JSONObject.toJSONString(configNameList);
+                fw.write(jsonArrayList);
+                fw.flush();
             }
             if(!successFlag){
                 System.exit(-1);

@@ -1,14 +1,12 @@
 package com.lancelot.config;
 
+import com.alibaba.fastjson.JSONObject;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 
 public class Generator {
@@ -62,6 +60,7 @@ public class Generator {
         path = Generator.class.getClassLoader().getResource("ftl").getPath();
         configuration.setDirectoryForTemplateLoading(new File(path));
         Template daoTemplate = configuration.getTemplate("dao.ftl");
+        List<String> configNameList = new LinkedList<>();
         for(File foundFile : fileList) {
             try {
                 //设置数据并执行
@@ -78,6 +77,7 @@ public class Generator {
                 template.process(map, writer);
                 Writer daoWriter = new OutputStreamWriter(new FileOutputStream(JAVA_DAO_OUTPUT_DIR + myClass.getClassName() + "ConfigDao.java"));
                 daoTemplate.process(map,daoWriter);
+                configNameList.add(myClass.getClassName());
             }catch(Throwable th){
                 th.printStackTrace();
             }
