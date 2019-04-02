@@ -6,6 +6,8 @@ public class Field {
     private String fieldName;
     //字段类型
     private String fieldType;
+    //特殊类型
+    private String specialFieldType;
     //字段注释
     private String fieldRemarks;
     //字段名首字母大写
@@ -21,6 +23,14 @@ public class Field {
 
     public String getFieldType() {
         return fieldType;
+    }
+
+    public String getSpecialFieldType() {
+        return specialFieldType;
+    }
+
+    public void setSpecialFieldType(String specialFieldType) {
+        this.specialFieldType = specialFieldType;
     }
 
     public void setFieldType(String fieldType) {

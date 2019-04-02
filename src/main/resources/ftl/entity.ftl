@@ -17,7 +17,7 @@ public class ${myClass.className} {
     <#if f_index == 0>
         @Id
     <#else>
-        @Column
+        @Column<#if (field.specialFieldType)??>(columnDefinition="${field.specialFieldType}")</#if>
     </#if>
         private ${field.fieldType} ${field.fieldName};
     <#assign f_index = f_index+1 />

@@ -42,14 +42,21 @@ public class ConfigClassGenerator {
             for (int i = 1; i < lineRow.size(); i++) {
                 String stringCellValue = lineRow.get(i);
                 String typeString = typeRow.get(i);
+                String javaType = typeString;
                 if(StringUtils.equals(typeString , "string")){
-                    typeString = "String";
+                    javaType = "String";
+                }
+                if(StringUtils.equals(typeString , "text")){
+                    javaType = "String";
                 }
                 String comment = commentRow.get(i);
-                if (StringUtils.isNotEmpty(stringCellValue) && !StringUtils.contains(typeString, "[")) {
+                if (StringUtils.isNotEmpty(stringCellValue) && !StringUtils.contains(javaType, "[")) {
                     Field field = new Field();
                     field.setFieldName(stringCellValue);
-                    field.setFieldType(typeString);
+                    field.setFieldType(javaType);
+                    if(StringUtils.equals(typeString , "text")){
+                        field.setSpecialFieldType("TEXT");
+                    }
                     field.setFieldRemarks(comment);
                     field.setFieldNameUpperFirstLetter(upperFirstLetter(stringCellValue));
                     fieldList.add(field);
