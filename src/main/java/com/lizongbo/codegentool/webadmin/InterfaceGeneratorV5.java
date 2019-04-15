@@ -18,6 +18,8 @@ public class InterfaceGeneratorV5 {
     public static final String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
     public static final String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
     public static final String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    private static Set<String> ajaxInterfaceSet = new HashSet<>();
+    private static Set<String> getMappingInterfaceSet = new HashSet<>();
 
     public static final String mainControllerPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/controller/MainBusController.java";
 
@@ -68,6 +70,12 @@ public class InterfaceGeneratorV5 {
                 String isActionRecord = metaData.get(startRow)[11];
                 String needLogin = metaData.get(startRow)[12];
                 String isGet = metaData.get(startRow)[13];
+                if("1".equals(isAJAXInterface)){
+                    ajaxInterfaceSet.add(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase());
+                }
+                if("1".equals(isGet)){
+                    getMappingInterfaceSet.add(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase());
+                }
                 // 先生成csv
                 // 先检查命名空间的目录是否已存在
                 File nameSpaceDir = new File(rootCsvFile, nameSpace);
@@ -269,22 +277,34 @@ public class InterfaceGeneratorV5 {
         // 声明包
         codeBuilder.append("package com.lexing360.dmp.hessian.service").append(";").append("\n");
         codeBuilder.append("import com.lexing360.dmp.hessian.components.BaseHessianService;\n");
+        codeBuilder.append("import org.springframework.web.bind.annotation.*;\n");
+        codeBuilder.append("import org.springframework.cloud.netflix.feign.FeignClient;\n");
         codeBuilder.append("/*\n");
         codeBuilder.append("created by:").append(creator).append("\n");
         codeBuilder.append("create time:").append(createTime).append("\n");
         codeBuilder.append("comment:").append(comment).append("\n");
         codeBuilder.append("warning:").append("tool-gencode,please do not edit it.").append("\n");
         codeBuilder.append("*/\n");
+        codeBuilder.append("@FeignClient(name = \"dmp-api\",path = \"/").append(nameSpace).append("/").append(interfaceName).append("\")\n");
         codeBuilder.append("public interface I").append(nameSpace).append(interfaceName)
                 .append("GameServerHessianService extends  BaseHessianService \n");
         // 声明方法
         codeBuilder.append("{\n");
+
         String returnType = "boolean";
         if (!"".equals(hessianServiceReturnType)) {
             returnType = hessianServiceReturnType;
         }
+        if(getMappingInterfaceSet.contains(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase())) {
+            codeBuilder.append("	@GetMapping(value=\"/");
+        }else{
+            codeBuilder.append("	@PostMapping(value=\"/");
+        }
+        String requestBodyAnnotation = ajaxInterfaceSet.contains(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase()) ? "@RequestBody" : "";
+        codeBuilder.append(nameSpace).append("/").append(interfaceName)
+                .append("\")\n");
         codeBuilder.append("              public ").append(returnType).append(" dealRemoteCommandRequest(")
-                .append("com.lexing360.dmp.requestobject.").append(nameSpace).append(".")
+                .append(requestBodyAnnotation + " com.lexing360.dmp.requestobject.").append(nameSpace).append(".")
                 .append(nameSpace).append(interfaceName).append("RequestObject requestObject);\n");
         codeBuilder.append("}\n");
         File requestObjectFile = new File(gameServerProcessorCodeDir,
