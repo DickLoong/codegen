@@ -287,7 +287,7 @@ public class InterfaceGeneratorV5 {
         // 生成每个request在远程服务器上运行的调度代码
         if (Integer.parseInt(isCreateHessianService) > 0) {
             interfaceCsv2GameServerProcessor(nameSpace, interfaceName, creator, createTime, comment,
-                    hessianServiceReturnType, gameServerProcessorCodeDir, gameServerHessianServiceDir);
+                    hessianServiceReturnType, gameServerHessianServiceDir);
         }
         // TODO 生成总的调度manager代码
         // TODO 后面要加生成页面的代码
@@ -295,8 +295,7 @@ public class InterfaceGeneratorV5 {
 
 
     private static void interfaceCsv2GameServerProcessor(String nameSpace, String interfaceName, String creator,
-                                                         String createTime, String comment, String hessianServiceReturnType, File gameServerProcessorCodeDir,
-                                                         File gameServerHessianServiceDir) {
+                                                         String createTime, String comment, String hessianServiceReturnType, File gameServerProcessorCodeDir) {
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
         codeBuilder.append("package com.lexing360.dmp.hessian.service").append(";").append("\n");
@@ -332,7 +331,7 @@ public class InterfaceGeneratorV5 {
                 .append(nameSpace).append(interfaceName).append("RequestObject requestObject);\n");
         codeBuilder.append("}\n");
 
-        File gameServerRequestObjectFile = new File(gameServerHessianServiceDir,
+        File gameServerRequestObjectFile = new File(gameServerProcessorCodeDir,
                 "I" + nameSpace + interfaceName + "GameServerHessianService.java");
         try (Writer writer = new FileWriter(gameServerRequestObjectFile)) {
             writer.write(codeBuilder.toString());
