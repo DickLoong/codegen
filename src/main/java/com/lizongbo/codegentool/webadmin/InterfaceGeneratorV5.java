@@ -14,9 +14,9 @@ import java.util.Set;
 public class InterfaceGeneratorV5 {
     public static final String metaCsvFilePath = "/Users/project/dmp-api/interface/CodeGenConf/InterfaceDetail/DInterfaceMeta_Interfacemeta.csv";
     public static final String interfaceCsvFileOutputPath = "/Users/project/dmp-api/interface/CodeGenConf";
-    public static final String interfaceCsvFileGameServerHessianServiceOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static final String interfaceCsvFileGameServerHessianServiceOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+    public static final String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+    public static final String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
     public static final String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
 
     public static final String mainControllerPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/controller/MainBusController.java";
