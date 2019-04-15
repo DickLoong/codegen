@@ -17,6 +17,9 @@ public class InterfaceGeneratorV5 {
     public static final String interfaceCsvFileGameServerHessianServiceOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
     public static final String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
     public static final String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+
+    public static final String interfaceCsvFileOperateServerRequestObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static final String interfaceCsvFileOperateServerResponseObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
     public static final String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
     private static Set<String> ajaxInterfaceSet = new HashSet<>();
     private static Set<String> getMappingInterfaceSet = new HashSet<>();
@@ -102,6 +105,16 @@ public class InterfaceGeneratorV5 {
                     gamegameserverRequestObjectDir.mkdir();
                 }
 
+                File operategameserverRequestObjectDir = new File(interfaceCsvFileOperateServerRequestObjectOutputPath,
+                        "requestobject");
+                if (!operategameserverRequestObjectDir.exists()) {
+                    operategameserverRequestObjectDir.mkdir();
+                }
+                operategameserverRequestObjectDir = new File(operategameserverRequestObjectDir, nameSpace);
+                if (!operategameserverRequestObjectDir.exists()) {
+                    operategameserverRequestObjectDir.mkdir();
+                }
+
                 File gamegameserverResponseObjectDir = new File(interfaceCsvFileGameServerResponseObjectOutputPath,
                         "responseobject");
                 if (!gamegameserverResponseObjectDir.exists()) {
@@ -110,6 +123,16 @@ public class InterfaceGeneratorV5 {
                 gamegameserverResponseObjectDir = new File(gamegameserverResponseObjectDir, nameSpace);
                 if (!gamegameserverResponseObjectDir.exists()) {
                     gamegameserverResponseObjectDir.mkdir();
+                }
+
+                File operategameserverResponseObjectDir = new File(interfaceCsvFileOperateServerResponseObjectOutputPath,
+                        "responseobject");
+                if (!operategameserverResponseObjectDir.exists()) {
+                    operategameserverResponseObjectDir.mkdir();
+                }
+                operategameserverResponseObjectDir = new File(operategameserverResponseObjectDir, nameSpace);
+                if (!operategameserverResponseObjectDir.exists()) {
+                    operategameserverResponseObjectDir.mkdir();
                 }
 
                 File logicCodeDir = new File(interfaceCodeOutPutpath, "logic");
@@ -167,7 +190,7 @@ public class InterfaceGeneratorV5 {
                     interfaceCsv2Code(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment,
                             returnType, preProcessObjectDir, logicCodeDir, gameServerProcessorCodeDir,
                             isCreateHessianService, hessianServiceReturnType, gamegameserverRequestObjectDir,
-                            gameserverHessianServerCodeDir, gamegameserverResponseObjectDir);
+                            gameserverHessianServerCodeDir, gamegameserverResponseObjectDir,operategameserverRequestObjectDir,operategameserverResponseObjectDir);
                 }
                 String interfaceRequestObjectClassName = nameSpace + interfaceName + "RequestObject ";
                 if (interfaceSet.contains(interfaceRequestObjectClassName)) {
@@ -253,10 +276,11 @@ public class InterfaceGeneratorV5 {
     public static void interfaceCsv2Code(File interfaceCodeCSV, String nameSpace, String interfaceName, String creator,
                                          String createTime, String comment, String returnType, File preProcessObjectDir, File logicCodeDir,
                                          File gameServerProcessorCodeDir, String isCreateHessianService, String hessianServiceReturnType,
-                                         File gameServerRequestObjectDir, File gameServerHessianServiceDir, File gamegameserverResponseObjectDir) {
+                                         File gameServerRequestObjectDir, File gameServerHessianServiceDir, File gamegameserverResponseObjectDir,
+                                         File operateServerRequestObjectDir,File operategameserverResponseObjectDir) {
         // 先生成中间类的代码
-        interfaceCsv2RequestObject(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment, returnType, gameServerRequestObjectDir);
-        interfaceCsv2ResponseObject(nameSpace, interfaceName, creator, createTime, comment, gamegameserverResponseObjectDir);
+        interfaceCsv2RequestObject(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment, returnType, gameServerRequestObjectDir,operateServerRequestObjectDir);
+        interfaceCsv2ResponseObject(nameSpace, interfaceName, creator, createTime, comment, gamegameserverResponseObjectDir,operategameserverResponseObjectDir);
         // 再生成logic的代码
         interfaceCsv2Logic(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment, returnType,
                 logicCodeDir);
@@ -301,19 +325,12 @@ public class InterfaceGeneratorV5 {
             codeBuilder.append("	@PostMapping(value=\"/");
         }
         String requestBodyAnnotation = ajaxInterfaceSet.contains(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase()) ? "@RequestBody" : "";
-        codeBuilder.append(nameSpace).append("/").append(interfaceName)
+        codeBuilder.append(CSVUtil.uncapFirst(nameSpace)).append("/").append(interfaceName)
                 .append("\")\n");
         codeBuilder.append("              public ").append(returnType).append(" dealRemoteCommandRequest(")
                 .append(requestBodyAnnotation + " com.lexing360.dmp.requestobject.").append(nameSpace).append(".")
                 .append(nameSpace).append(interfaceName).append("RequestObject requestObject);\n");
         codeBuilder.append("}\n");
-        File requestObjectFile = new File(gameServerProcessorCodeDir,
-                "I" + nameSpace + interfaceName + "GameServerHessianService.java");
-        try (Writer writer = new FileWriter(requestObjectFile)) {
-            writer.write(codeBuilder.toString());
-        } catch (Throwable th) {
-            th.getStackTrace();
-        }
 
         File gameServerRequestObjectFile = new File(gameServerHessianServiceDir,
                 "I" + nameSpace + interfaceName + "GameServerHessianService.java");
@@ -326,7 +343,7 @@ public class InterfaceGeneratorV5 {
 
     public static void interfaceCsv2RequestObject(File interfaceCodeCSV, String nameSpace, String interfaceName,
                                                   String creator, String createTime, String comment, String returnType,
-                                                  File gameServerRequestObjectDir) {
+                                                  File gameServerRequestObjectDir,File operateServerRequestObjectDir) {
         // 读取类的属性
         List<String[]> datas = CSVUtil.getDataFromCSV2WithoutCheck(interfaceCodeCSV.getAbsolutePath());
         StringBuilder codeBuilder = new StringBuilder();
@@ -385,9 +402,17 @@ public class InterfaceGeneratorV5 {
         } catch (Throwable th) {
             th.getStackTrace();
         }
+
+        File operateServerRequestObjectFile = new File(operateServerRequestObjectDir, nameSpace + interfaceName + "RequestObject.java");
+        try (Writer writer = new FileWriter(operateServerRequestObjectFile)) {
+            writer.write(codeBuilder.toString());
+        } catch (Throwable th) {
+            th.getStackTrace();
+        }
     }
 
-    private static void interfaceCsv2ResponseObject(String nameSpace, String interfaceName, String creator, String createTime, String comment, File gameServerResponseObjectDir) {
+    private static void interfaceCsv2ResponseObject(String nameSpace, String interfaceName, String creator, String createTime, String comment,
+                                                    File gameServerResponseObjectDir,File operateServerResponseObjectDir) {
         // 读取类的属性
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
@@ -408,13 +433,21 @@ public class InterfaceGeneratorV5 {
         codeBuilder.append("}");
 
         File gameServerResponseObjectFile = new File(gameServerResponseObjectDir, nameSpace + interfaceName + "ResponseObject.java");
-        if (gameServerResponseObjectFile.exists()) {
-            return;
+        if (!gameServerResponseObjectFile.exists()) {
+            try (Writer writer = new FileWriter(gameServerResponseObjectFile)) {
+                writer.write(codeBuilder.toString());
+            } catch (Throwable th) {
+                th.getStackTrace();
+            }
         }
-        try (Writer writer = new FileWriter(gameServerResponseObjectFile)) {
-            writer.write(codeBuilder.toString());
-        } catch (Throwable th) {
-            th.getStackTrace();
+
+        File operateServerResponseObjectFile = new File(operateServerResponseObjectDir, nameSpace + interfaceName + "ResponseObject.java");
+        if (!operateServerResponseObjectFile.exists()) {
+            try (Writer writer = new FileWriter(operateServerResponseObjectFile)) {
+                writer.write(codeBuilder.toString());
+            } catch (Throwable th) {
+                th.getStackTrace();
+            }
         }
     }
 
