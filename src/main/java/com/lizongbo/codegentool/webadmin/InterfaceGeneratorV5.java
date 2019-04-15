@@ -309,7 +309,7 @@ public class InterfaceGeneratorV5 {
         codeBuilder.append("comment:").append(comment).append("\n");
         codeBuilder.append("warning:").append("tool-gencode,please do not edit it.").append("\n");
         codeBuilder.append("*/\n");
-        codeBuilder.append("@FeignClient(name = \"dmp-api\",path = \"/").append(nameSpace).append("/").append(interfaceName).append("\")\n");
+        codeBuilder.append("@FeignClient(name = \"dmp-api\")\n");
         codeBuilder.append("public interface I").append(nameSpace).append(interfaceName)
                 .append("GameServerHessianService extends  BaseHessianService \n");
         // 声明方法
