@@ -171,6 +171,7 @@ public class InterfaceGeneratorV5 {
                 String returnTypeObjectClassName = "com.lexing360.dmp.responseobject." + nameSpace + "." + nameSpace + interfaceName + "ResponseObject ";
                 returnType = returnTypeObjectClassName;
                 hessianServiceReturnType = returnTypeObjectClassName;
+                boolean maskFlag = StringUtils.equals("1", isMask);
                 if (!interfaceCodeCSV.exists()) {
                     // 如果不存在文件，添加上去
                     FileOutputStream fos = new FileOutputStream(interfaceCodeCSV.getAbsolutePath());
@@ -190,7 +191,7 @@ public class InterfaceGeneratorV5 {
                     interfaceCsv2Code(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment,
                             returnType, preProcessObjectDir, logicCodeDir, gameServerProcessorCodeDir,
                             isCreateHessianService, hessianServiceReturnType, gamegameserverRequestObjectDir,
-                            gameserverHessianServerCodeDir, gamegameserverResponseObjectDir,operategameserverRequestObjectDir,operategameserverResponseObjectDir);
+                            gameserverHessianServerCodeDir, gamegameserverResponseObjectDir,operategameserverRequestObjectDir,operategameserverResponseObjectDir,maskFlag);
                 }
                 String interfaceRequestObjectClassName = nameSpace + interfaceName + "RequestObject ";
                 if (interfaceSet.contains(interfaceRequestObjectClassName)) {
@@ -224,7 +225,6 @@ public class InterfaceGeneratorV5 {
                 if (StringUtils.equals("1", needLogin)) {
                     codeBuilder.append("    @LoginRequired\n");
                 }
-                boolean maskFlag = StringUtils.equals("1", isMask);
                 String returnStr = returnType.contains("void") ? " " : "return";
                 String requestBodyAnnotation = "1".equals(isJsonInputSupport) ? "@RequestBody" : "";
                 String logicClassName = new StringBuilder("com.lexing360.dmp.logic.")
@@ -277,7 +277,7 @@ public class InterfaceGeneratorV5 {
                                          String createTime, String comment, String returnType, File preProcessObjectDir, File logicCodeDir,
                                          File gameServerProcessorCodeDir, String isCreateHessianService, String hessianServiceReturnType,
                                          File gameServerRequestObjectDir, File gameServerHessianServiceDir, File gamegameserverResponseObjectDir,
-                                         File operateServerRequestObjectDir,File operategameserverResponseObjectDir) {
+                                         File operateServerRequestObjectDir,File operategameserverResponseObjectDir,boolean maskFlag) {
         // 先生成中间类的代码
         interfaceCsv2RequestObject(interfaceCodeCSV, nameSpace, interfaceName, creator, createTime, comment, returnType, gameServerRequestObjectDir,operateServerRequestObjectDir);
         interfaceCsv2ResponseObject(nameSpace, interfaceName, creator, createTime, comment, gamegameserverResponseObjectDir,operategameserverResponseObjectDir);
@@ -287,7 +287,7 @@ public class InterfaceGeneratorV5 {
         // 生成每个request在远程服务器上运行的调度代码
         if (Integer.parseInt(isCreateHessianService) > 0) {
             interfaceCsv2GameServerProcessor(nameSpace, interfaceName, creator, createTime, comment,
-                    hessianServiceReturnType, gameServerHessianServiceDir);
+                    hessianServiceReturnType, gameServerHessianServiceDir,maskFlag);
         }
         // TODO 生成总的调度manager代码
         // TODO 后面要加生成页面的代码
@@ -295,13 +295,14 @@ public class InterfaceGeneratorV5 {
 
 
     private static void interfaceCsv2GameServerProcessor(String nameSpace, String interfaceName, String creator,
-                                                         String createTime, String comment, String hessianServiceReturnType, File gameServerProcessorCodeDir) {
+                                                         String createTime, String comment, String hessianServiceReturnType, File gameServerProcessorCodeDir,boolean maskFlag) {
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
         codeBuilder.append("package com.lexing360.dmp.hessian.service").append(";").append("\n");
         codeBuilder.append("import com.lexing360.dmp.hessian.components.BaseHessianService;\n");
         codeBuilder.append("import org.springframework.web.bind.annotation.*;\n");
         codeBuilder.append("import org.springframework.cloud.netflix.feign.FeignClient;\n");
+        codeBuilder.append("import com.lexing360.dmp.dto.Response;\n");
         codeBuilder.append("/*\n");
         codeBuilder.append("created by:").append(creator).append("\n");
         codeBuilder.append("create time:").append(createTime).append("\n");
@@ -316,7 +317,11 @@ public class InterfaceGeneratorV5 {
 
         String returnType = "boolean";
         if (!"".equals(hessianServiceReturnType)) {
-            returnType = hessianServiceReturnType;
+            if(!maskFlag) {
+                returnType = hessianServiceReturnType;
+            }else{
+                returnType = "Response<" + hessianServiceReturnType + "> ";
+            }
         }
         if(getMappingInterfaceSet.contains(nameSpace.toLowerCase() + "|" + interfaceName.toLowerCase())) {
             codeBuilder.append("	@GetMapping(value=\"/");
