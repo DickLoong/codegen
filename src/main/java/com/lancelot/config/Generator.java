@@ -19,11 +19,11 @@ public class Generator {
 
     public static void main(String[] args) throws Exception{
         if(null != args && args.length > 4){
-            CONFIG_CSV_DIR = args[1];
-            JAVA_OUTPUT_DIR = args[2];
-            JAVA_DAO_OUTPUT_DIR = args[3];
-            CONFIG_PACKAGE_NAME = args[4];
-            CONFIG_DAO_PACKAGE_NAME = args[5];
+            CONFIG_CSV_DIR = args[0];
+            JAVA_OUTPUT_DIR = args[1];
+            JAVA_DAO_OUTPUT_DIR = args[2];
+            CONFIG_PACKAGE_NAME = args[3];
+            CONFIG_DAO_PACKAGE_NAME = args[4];
         }
         File baseFile = new File(CONFIG_CSV_DIR);
         List<File> fileList = new LinkedList<>();
