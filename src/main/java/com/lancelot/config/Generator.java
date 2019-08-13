@@ -75,7 +75,7 @@ public class Generator {
 
                 ConfigClassGenerator classGenerator = new ConfigClassGenerator();
                 ConfigClass myClass = classGenerator.generateClass(foundFile);
-
+                System.out.println("generating class|" + myClass.getClassName());
                 map.put("myClass", myClass);
                 map.put("config_package_name",CONFIG_PACKAGE_NAME);
                 map.put("config_dao_package_name",CONFIG_DAO_PACKAGE_NAME);
@@ -84,6 +84,7 @@ public class Generator {
                 template.process(map, writer);
                 Writer daoWriter = new OutputStreamWriter(new FileOutputStream(JAVA_DAO_OUTPUT_DIR + myClass.getClassName() + "ConfigDao.java"));
                 daoTemplate.process(map,daoWriter);
+                System.out.println("finished generating class|" + myClass.getClassName());
                 configNameList.add(myClass.getClassName());
             }catch(Throwable th){
                 th.printStackTrace();
