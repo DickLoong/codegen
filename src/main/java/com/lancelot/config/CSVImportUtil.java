@@ -82,6 +82,7 @@ public class CSVImportUtil {
                     Map<Integer,String> typeLineMap1 = new TreeMap<>();
                     List<TreeMap> jsonObjectList = new LinkedList<>();
                     String name = foundFile.getName();
+                    System.out.println("generating config|" + name);
                     for (int rowNum = 1; rowNum < csvRecords.size(); rowNum++) {
                         CSVRecord workingRow = csvRecords.get(rowNum);
                         TreeMap workingObject = new TreeMap();
@@ -106,6 +107,7 @@ public class CSVImportUtil {
                         }
                         jsonObjectList.add(workingObject);
                     }
+                    System.out.println("generating config|checked|" + name + "|" + csvRecords.size());
                     if(successFlag) {
                         String outputString = JSONObject.toJSONString(jsonObjectList);
                         name = StringUtils.remove(name, ".csv");
@@ -119,6 +121,7 @@ public class CSVImportUtil {
                                 new FileOutputStream(targetJsonFileLocation), "UTF-8"));
                         bw.write(outputString);
                         bw.close();
+                        System.out.println("generating config|achieved|" + name + "|" + csvRecords.size());
                         configNameList.add(name);
                     }
                 }catch(Throwable th){
@@ -130,6 +133,7 @@ public class CSVImportUtil {
                 String jsonArrayList = JSONObject.toJSONString(configNameList);
                 fw.write(jsonArrayList);
                 fw.flush();
+                System.out.println("generating config|menued|" + configNameList.size() + "|" + jsonArrayList);
             }
             if(!successFlag){
                 System.exit(-1);
