@@ -1,10 +1,11 @@
 package com.lancelot.codegentool.deploy;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Enumeration;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtil {
@@ -78,14 +79,131 @@ public class ZipUtil {
 		}
 	}
 
-	public static void main(String[] args) {
-		if (args.length != 3) {
-			System.err.println("usage: java ScpTo file1 user@remotehost:file2");
-			System.exit(-1);
-		}
-		String sourceFilePath = args[0];
-		String zipFilePath = args[1];
-		String fileName = args[2];
-		ZipUtil.Zip(sourceFilePath, zipFilePath, fileName);
+	/**
+	 *  此方法将默认设置解压缩后文件的保存路径为zip文件所在路径
+	 *      即解压缩到当前文件夹下
+	 * @param zip zip文件位置
+	 * @param charsetName 字符编码
+	 */
+	public static void unpack(String zip, String charsetName) {
+		unpack(new File(zip), charsetName);
 	}
+
+	/**
+	 *
+	 * @param zip zip文件位置
+	 * @param outputDir 解压缩后文件保存路径
+	 * @param charsetName 字符编码
+	 */
+	public static void unpack(String zip, String outputDir, String charsetName) {
+		unpack(new File(zip), new File(outputDir), charsetName);
+	}
+
+	/**
+	 *  此方法将默认设置解压缩后文件的保存路径为zip文件所在路径
+	 *      即解压缩到当前文件夹
+	 * @param zip zip文件位置
+	 * @param charsetName 字符编码
+	 */
+	public static void unpack(File zip, String charsetName) {
+		unpack(zip, null, charsetName);
+	}
+
+	/**
+	 *
+	 * @param zip zip文件位置
+	 * @param outputDir 解压缩后文件保存路径
+	 */
+	public static void unpack(File zip, File outputDir) {
+		unpack(zip, outputDir, "");
+	}
+
+	/**
+	 *
+	 * @param zip zip文件位置
+	 * @param outputDir 解压缩后文件保存路径
+	 * @param charsetName 字符编码
+	 */
+	public static void unpack(File zip, File outputDir, String charsetName) {
+
+		FileOutputStream out = null;
+		InputStream in = null;
+		//读出文件数据
+		ZipFile zipFileData = null;
+		ZipFile zipFile = null;
+		try {
+			//若目标保存文件位置不存在
+			if (outputDir != null) {
+				if (!outputDir.exists()) {
+					outputDir.mkdirs();
+				}
+			}
+			if (charsetName != null && charsetName != "") {
+				zipFile = new ZipFile(zip.getPath(), Charset.forName(charsetName));
+			} else {
+				zipFile = new ZipFile(zip.getPath(), Charset.forName("utf8"));
+			}
+			//zipFile = new ZipFile(zip.getPath(), Charset.forName(charsetName));
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+			//处理创建文件夹
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				String filePath = "";
+
+				if (outputDir == null) {
+					filePath = zip.getParentFile().getPath() + File.separator + entry.getName();
+				} else {
+					filePath = outputDir.getPath() + File.separator + entry.getName();
+				}
+				File file = new File(filePath);
+				File parentFile = file.getParentFile();
+				if (!parentFile.exists()) {
+					parentFile.mkdirs();
+				}
+				if (parentFile.isDirectory()) {
+					continue;
+				}
+			}
+			if (charsetName != null && charsetName != "") {
+				zipFileData = new ZipFile(zip.getPath(), Charset.forName(charsetName));
+			} else {
+				zipFileData = new ZipFile(zip.getPath(), Charset.forName("utf8"));
+			}
+			Enumeration<? extends ZipEntry> entriesData = zipFileData.entries();
+			while (entriesData.hasMoreElements()) {
+				ZipEntry entry = entriesData.nextElement();
+				in = zipFile.getInputStream(entry);
+				String filePath = "";
+				if (outputDir == null) {
+					filePath = zip.getParentFile().getPath() + File.separator + entry.getName();
+				} else {
+					filePath = outputDir.getPath() + File.separator + entry.getName();
+				}
+				File file = new File(filePath);
+				if (file.isDirectory()) {
+					continue;
+				}
+				out = new FileOutputStream(filePath);
+				int len = -1;
+				byte[] bytes = new byte[1024];
+				while ((len = in.read(bytes)) != -1) {
+					out.write(bytes, 0, len);
+				}
+				out.flush();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				in.close();
+				zipFile.close();
+				zipFileData.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

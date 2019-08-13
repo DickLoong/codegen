@@ -11,13 +11,20 @@ import java.util.*;
 
 public class Generator {
 
-    public static final String CONFIG_CSV_DIR = "/Users/project/svndbconfig";
-    private static final String JAVA_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/";
-    private static final String JAVA_DAO_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/dao/";
-    private static final String CONFIG_PACKAGE_NAME = "com.lexing360.dmp.dbconfig";
-    private static final String CONFIG_DAO_PACKAGE_NAME = "com.lexing360.dmp.dbconfig.dao";
+    public static  String CONFIG_CSV_DIR = "/Users/project/svndbconfig";
+    private static String JAVA_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/";
+    private static String JAVA_DAO_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/dao/";
+    private static String CONFIG_PACKAGE_NAME = "com.lexing360.dmp.dbconfig";
+    private static String CONFIG_DAO_PACKAGE_NAME = "com.lexing360.dmp.dbconfig.dao";
 
     public static void main(String[] args) throws Exception{
+        if(null != args && args.length > 4){
+            CONFIG_CSV_DIR = args[1];
+            JAVA_OUTPUT_DIR = args[2];
+            JAVA_DAO_OUTPUT_DIR = args[3];
+            CONFIG_PACKAGE_NAME = args[4];
+            CONFIG_DAO_PACKAGE_NAME = args[5];
+        }
         File baseFile = new File(CONFIG_CSV_DIR);
         List<File> fileList = new LinkedList<>();
         List<File> searchingFileList = new ArrayList<>();
