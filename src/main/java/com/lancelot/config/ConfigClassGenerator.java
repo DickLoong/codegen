@@ -52,6 +52,9 @@ public class ConfigClassGenerator {
                 if(StringUtils.equals(typeString , "int")){
                     javaType = "Integer";
                 }
+                if(StringUtils.equals(typeString , "long")){
+                    javaType = "Long";
+                }
                 String comment = commentRow.get(i);
                 if (StringUtils.isNotEmpty(stringCellValue) && !StringUtils.contains(javaType, "[")) {
                     Field field = new Field();
