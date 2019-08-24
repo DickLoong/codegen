@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Generator {
 
-    public static  String CONFIG_CSV_DIR = "/Users/project/svndbconfig";
+    public static  String CONFIG_CSV_DIR = "/Users/project/gitdbconfig";
     private static String JAVA_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/";
     private static String JAVA_DAO_OUTPUT_DIR = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/dbconfig/dao/";
     private static String CONFIG_PACKAGE_NAME = "com.lexing360.dmp.dbconfig";

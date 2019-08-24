@@ -12,19 +12,34 @@ import java.util.Set;
 
 
 public class InterfaceGeneratorV5 {
-    public static final String metaCsvFilePath = "/Users/project/dmp-api/interface/CodeGenConf/InterfaceDetail/DInterfaceMeta_Interfacemeta.csv";
-    public static final String interfaceCsvFileOutputPath = "/Users/project/dmp-api/interface/CodeGenConf";
-    public static final String interfaceCsvFileGameServerHessianServiceOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+    public static  String metaCsvFilePath = "/Users/project/dmp-api/interface/CodeGenConf/InterfaceDetail/DInterfaceMeta_Interfacemeta.csv";
+    public static  String interfaceCsvFileOutputPath = "/Users/project/dmp-api/interface/CodeGenConf";
+    public static  String interfaceCsvFileGameServerHessianServiceOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+    public static  String interfaceCsvFileGameServerRequestObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
+    public static  String interfaceCsvFileGameServerResponseObjectOutputPath = "/Users/project/dmp_probe/src/main/java/com/lexing360/dmp";
 
-    public static final String interfaceCsvFileOperateServerRequestObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCsvFileOperateServerResponseObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
-    public static final String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static  String interfaceCsvFileOperateServerRequestObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static  String interfaceCsvFileOperateServerResponseObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static  String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
+    public static  String mainControllerPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/controller/MainBusController.java";
     private static Set<String> ajaxInterfaceSet = new HashSet<>();
     private static Set<String> getMappingInterfaceSet = new HashSet<>();
 
-    public static final String mainControllerPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/controller/MainBusController.java";
+
+    public static void main(String[] args) throws Throwable {
+        if(args != null && args.length >=9 ){
+            metaCsvFilePath = args[0];
+            interfaceCsvFileOutputPath = args[1];
+            interfaceCsvFileGameServerHessianServiceOutputPath = args[2];
+            interfaceCsvFileGameServerRequestObjectOutputPath = args[3];
+            interfaceCsvFileGameServerResponseObjectOutputPath = args[4];
+            interfaceCsvFileOperateServerRequestObjectOutputPath = args[5];
+            interfaceCsvFileOperateServerResponseObjectOutputPath = args[6];
+            interfaceCodeOutPutpath = args[7];
+            mainControllerPath = args[8];
+        }
+        interfaceMeta2Csv();
+    }
 
     public static void interfaceMeta2Csv() throws Throwable {
         // 代码meta从第三行非#号开头数据开始
@@ -521,8 +536,6 @@ public class InterfaceGeneratorV5 {
         }
     }
 
-    public static void main(String[] args) throws Throwable {
-        interfaceMeta2Csv();
-    }
+
 
 }
