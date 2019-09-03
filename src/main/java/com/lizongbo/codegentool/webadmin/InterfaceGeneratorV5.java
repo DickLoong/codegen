@@ -22,12 +22,13 @@ public class InterfaceGeneratorV5 {
     public static  String interfaceCsvFileOperateServerResponseObjectOutputPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
     public static  String interfaceCodeOutPutpath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp";
     public static  String mainControllerPath = "/Users/project/dmp-api/src/main/java/com/lexing360/dmp/controller/MainBusController.java";
+    public static String packageName = "com.lexing360.";
     private static Set<String> ajaxInterfaceSet = new HashSet<>();
     private static Set<String> getMappingInterfaceSet = new HashSet<>();
 
 
     public static void main(String[] args) throws Throwable {
-        if(args != null && args.length >=9 ){
+        if(args != null && args.length >=10 ){
             metaCsvFilePath = args[0];
             interfaceCsvFileOutputPath = args[1];
             interfaceCsvFileGameServerHessianServiceOutputPath = args[2];
@@ -37,6 +38,7 @@ public class InterfaceGeneratorV5 {
             interfaceCsvFileOperateServerResponseObjectOutputPath = args[6];
             interfaceCodeOutPutpath = args[7];
             mainControllerPath = args[8];
+            packageName = args[9];
         }
         interfaceMeta2Csv();
     }
@@ -47,10 +49,10 @@ public class InterfaceGeneratorV5 {
         File rootCsvFile = new File(interfaceCsvFileOutputPath);
         StringBuilder codeBuilder = new StringBuilder();
         Set<String> interfaceSet = new HashSet<>();
-        codeBuilder.append("package com.lexing360.dmp.controller;\n");
-        codeBuilder.append("import com.lexing360.common.dto.Response;\n" +
-                "import com.lexing360.dmp.utils.BusinessLogicException;\n" +
-                "import com.lexing360.dmp.utils.BusinessLogicProcessUtil;");
+        codeBuilder.append("package " + packageName + "dmp.controller;\n");
+        codeBuilder.append("import " + packageName + "common.dto.Response;\n" +
+                "import " + packageName + "dmp.utils.BusinessLogicException;\n" +
+                "import " + packageName + "dmp.utils.BusinessLogicProcessUtil;");
         codeBuilder.append("import org.springframework.beans.factory.annotation.Autowired;\n");
         codeBuilder.append("import org.springframework.web.bind.annotation.*;\n");
         codeBuilder.append("import org.springframework.stereotype.Controller;\n");
@@ -62,8 +64,8 @@ public class InterfaceGeneratorV5 {
         codeBuilder.append("import org.springframework.web.bind.annotation.RequestAttribute;\n");
         codeBuilder.append("import io.swagger.annotations.ApiOperation;\n");
         codeBuilder.append("import io.swagger.annotations.Api;\n");
-        codeBuilder.append("import com.lexing360.auth.annotation.LoginRequired;\n");
-        codeBuilder.append("import com.lexing360.dmp.annotation.ActionRecord;\n");
+        codeBuilder.append("import " + packageName + "auth.annotation.LoginRequired;\n");
+        codeBuilder.append("import " + packageName + "dmp.annotation.ActionRecord;\n");
         codeBuilder.append("@Api(value=\"apihub\") ");
         codeBuilder.append("@Controller\n").append("public class MainBusController {\n");
         codeBuilder.append("@Autowired\n" +
@@ -183,7 +185,7 @@ public class InterfaceGeneratorV5 {
                 }
 
                 File interfaceCodeCSV = new File(nameSpaceDir, interfaceName + ".csv");
-                String returnTypeObjectClassName = "com.lexing360.dmp.responseobject." + nameSpace + "." + nameSpace + interfaceName + "ResponseObject ";
+                String returnTypeObjectClassName = "" + packageName + "dmp.responseobject." + nameSpace + "." + nameSpace + interfaceName + "ResponseObject ";
                 returnType = returnTypeObjectClassName;
                 hessianServiceReturnType = returnTypeObjectClassName;
                 boolean maskFlag = StringUtils.equals("1", isMask);
@@ -217,7 +219,7 @@ public class InterfaceGeneratorV5 {
                     interfaceSet.add(interfaceRequestObjectClassName);
                 }
                 // 对主controller注入各个logic
-                codeBuilder.append("\n@Resource\n").append("private com.lexing360.dmp.logic.")
+                codeBuilder.append("\n@Resource\n").append("private " + packageName + "dmp.logic.")
                         .append(nameSpace).append(".").append(nameSpace).append(interfaceName).append("Logic")
                         .append(" ").append(CSVUtil.uncapFirst(nameSpace)).append(interfaceName).append("Logic").append(";\n");
                 // 在主controller下面加入一一段映射代码
@@ -242,7 +244,7 @@ public class InterfaceGeneratorV5 {
                 }
                 String returnStr = returnType.contains("void") ? " " : "return";
                 String requestBodyAnnotation = "1".equals(isJsonInputSupport) ? "@RequestBody" : "";
-                String logicClassName = new StringBuilder("com.lexing360.dmp.logic.")
+                String logicClassName = new StringBuilder("" + packageName + "dmp.logic.")
                         .append(nameSpace).append(".").append(nameSpace).append(interfaceName)
                         .append("Logic").toString();
                 if (maskFlag) {
@@ -252,7 +254,7 @@ public class InterfaceGeneratorV5 {
                 }
                 codeBuilder.append(nameSpace).append(interfaceName)
                         .append("(\n			")
-                        .append(requestBodyAnnotation + " com.lexing360.dmp.requestobject.")
+                        .append(requestBodyAnnotation + " " + packageName + "dmp.requestobject.")
                         .append(nameSpace).append(".").append(interfaceRequestObjectClassName)
                         .append(" requestObject ");
                 if (maskFlag) {
@@ -313,11 +315,11 @@ public class InterfaceGeneratorV5 {
                                                          String createTime, String comment, String hessianServiceReturnType, File gameServerProcessorCodeDir,boolean maskFlag) {
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
-        codeBuilder.append("package com.lexing360.dmp.hessian.service").append(";").append("\n");
-        codeBuilder.append("import com.lexing360.dmp.hessian.components.BaseHessianService;\n");
+        codeBuilder.append("package " + packageName + "dmp.hessian.service").append(";").append("\n");
+        codeBuilder.append("import " + packageName + "dmp.hessian.components.BaseHessianService;\n");
         codeBuilder.append("import org.springframework.web.bind.annotation.*;\n");
         codeBuilder.append("import org.springframework.cloud.netflix.feign.FeignClient;\n");
-        codeBuilder.append("import com.lexing360.dmp.dto.Response;\n");
+        codeBuilder.append("import " + packageName + "dmp.dto.Response;\n");
         codeBuilder.append("/*\n");
         codeBuilder.append("created by:").append(creator).append("\n");
         codeBuilder.append("create time:").append(createTime).append("\n");
@@ -347,7 +349,7 @@ public class InterfaceGeneratorV5 {
         codeBuilder.append(CSVUtil.uncapFirst(nameSpace)).append("/").append(interfaceName)
                 .append("\")\n");
         codeBuilder.append("              public ").append(returnType).append(" dealRemoteCommandRequest(")
-                .append(requestBodyAnnotation + " com.lexing360.dmp.requestobject.").append(nameSpace).append(".")
+                .append(requestBodyAnnotation + " " + packageName + "dmp.requestobject.").append(nameSpace).append(".")
                 .append(nameSpace).append(interfaceName).append("RequestObject requestObject);\n");
         codeBuilder.append("}\n");
 
@@ -367,9 +369,9 @@ public class InterfaceGeneratorV5 {
         List<String[]> datas = CSVUtil.getDataFromCSV2WithoutCheck(interfaceCodeCSV.getAbsolutePath());
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
-        codeBuilder.append("package com.lexing360.dmp.requestobject.").append(nameSpace)
+        codeBuilder.append("package " + packageName + "dmp.requestobject.").append(nameSpace)
                 .append(";\n");
-        codeBuilder.append("import com.lexing360.dmp.requestobject.BaseRequestObject;\n");
+        codeBuilder.append("import " + packageName + "dmp.requestobject.BaseRequestObject;\n");
         codeBuilder.append("import io.swagger.annotations.ApiModelProperty;");
         codeBuilder.append("import lombok.Data;\n");
         codeBuilder.append("/*\n");
@@ -435,9 +437,9 @@ public class InterfaceGeneratorV5 {
         // 读取类的属性
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
-        codeBuilder.append("package com.lexing360.dmp.responseobject.").append(nameSpace)
+        codeBuilder.append("package " + packageName + "dmp.responseobject.").append(nameSpace)
                 .append(";\n");
-        codeBuilder.append("import com.lexing360.dmp.responseobject.BaseResponseObject;\n");
+        codeBuilder.append("import " + packageName + "dmp.responseobject.BaseResponseObject;\n");
         codeBuilder.append("import lombok.Data;\n");
         codeBuilder.append("/*\n");
         codeBuilder.append("created by:").append(creator).append("\n");
@@ -475,14 +477,14 @@ public class InterfaceGeneratorV5 {
         // 读取类的属性
         StringBuilder codeBuilder = new StringBuilder();
         // 声明包
-        codeBuilder.append("package com.lexing360.dmp.logic.").append(nameSpace).append(";\n");
+        codeBuilder.append("package " + packageName + "dmp.logic.").append(nameSpace).append(";\n");
         codeBuilder.append("import org.springframework.stereotype.Controller;\n\n");
         codeBuilder.append("import com.alibaba.fastjson.JSON;\n")
                 .append("import utils.WebUtil;\n")
-                .append("import com.lexing360.dmp.utils.BusinessLogicException;\n")
+                .append("import " + packageName + "dmp.utils.BusinessLogicException;\n")
                 .append("import utils.LogWrapper;\n\n");
         String interfaceRequestObjectClassName = nameSpace + interfaceName + "RequestObject ";
-        codeBuilder.append("import com.lexing360.dmp.requestobject.").append(nameSpace).append(".")
+        codeBuilder.append("import " + packageName + "dmp.requestobject.").append(nameSpace).append(".")
                 .append(interfaceRequestObjectClassName).append(";\n\n");
         codeBuilder.append("@Controller").append("\n\n");
         codeBuilder.append("public class ").append(nameSpace).append(interfaceName).append("Logic\n");

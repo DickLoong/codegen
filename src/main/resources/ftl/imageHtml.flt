@@ -1,0 +1,29 @@
+<html>
+<head></head>
+<body>
+<div>${title}</div>
+<div>${content}</div>
+<table>
+<#assign f_index = 0 />
+    <#list dataList as data>
+    <tr>
+        <#list data as dataItem>
+            <#if f_index == 0>
+                <th>
+            <#else>
+                <td>
+            </#if>
+                 ${dataItem}
+            <#if f_index == 0>
+                </th>
+            <#else>
+                </td>
+             </#if>
+        </#list>
+        <#assign f_index = f_index+1 />
+    </tr>
+    </#list>
+</table>
+<div>${watermark}</div>
+</body>
+</html>
