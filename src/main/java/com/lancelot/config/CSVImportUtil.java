@@ -152,12 +152,12 @@ public class CSVImportUtil {
                 return new Result<>(value);
             }
             value = StringUtils.remove(value, "\"\"");
-            value = StringUtils.trim(value);
             if (StringUtils.isEmpty(value)) {
                 return new Result<>(value);
             }
             switch (type) {
                 case "int": {
+                    value = StringUtils.trim(value);
                     if (StringUtils.contains(value, "0x")) {
                         value = StringUtils.remove(value, "0x");
                         int i = Integer.valueOf(value, 16);
@@ -169,6 +169,7 @@ public class CSVImportUtil {
                     return new Result<>(value);
                 }
                 case "short": {
+                    value = StringUtils.trim(value);
                     if (StringUtils.contains(value, "0x")) {
                         value = StringUtils.remove(value, "0x");
                         int i = Integer.valueOf(value, 16);
@@ -180,6 +181,7 @@ public class CSVImportUtil {
                     return new Result<>(value);
                 }
                 case "long": {
+                    value = StringUtils.trim(value);
                     if (StringUtils.contains(value, "0x")) {
                         value = StringUtils.remove(value, "0x");
                         long i = Long.valueOf(value, 16);
@@ -191,6 +193,7 @@ public class CSVImportUtil {
                     return new Result<>(value);
                 }
                 case "double": {
+                    value = StringUtils.trim(value);
                     Double l = Double.parseDouble(value);
                     return new Result<>(value);
                 }
