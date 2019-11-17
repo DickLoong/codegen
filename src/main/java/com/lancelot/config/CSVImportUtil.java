@@ -15,7 +15,7 @@ import java.util.*;
 
 public class CSVImportUtil {
     private static String EXCEL_DIR = Generator.CONFIG_CSV_DIR;
-    private static String JSON_OUTPUT_DIR = "/Users/project/dmp-api/src/main/resources/dbconfig";
+    private static String JSON_OUTPUT_DIR = "D:\\Users\\Burst\\IdeaProjects\\marvelbi-backend\\src\\main\\resources\\dbconfig";
 
     public static void main(String[] args) {
         try {
@@ -152,6 +152,7 @@ public class CSVImportUtil {
                 return new Result<>(value);
             }
             value = StringUtils.remove(value, "\"\"");
+            value = StringUtils.trim(value);
             if (StringUtils.isEmpty(value)) {
                 return new Result<>(value);
             }
