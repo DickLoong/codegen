@@ -2,7 +2,7 @@ package ${config_package_name};
 
 import lombok.Data;
 
-import com.lexing360.dmp.annotation.DBConfig;
+import com.marvelbi.dmp.annotation.DBConfig;
 import lombok.Data;
 import javax.persistence.*;
 
